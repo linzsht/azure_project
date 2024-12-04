@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recherche de Ville</title>
+</head>
+<body>
+    <h1>Informations sur une ville</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="city">Nom de la ville :</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Rechercher</button>
+    </form>
+</body>
+</html>
