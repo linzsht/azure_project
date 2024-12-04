@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la Ville</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            width: 60%;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        .info {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .info ul {
+            padding-left: 20px;
+        }
+        .info ul li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Informations sur la Ville</h1>
+        <div class="info">
+            {% if details.photo_url %}
+    <img src="{{ details.photo_url }}" alt="Photo de {{ details.city }}" style="width: 100%; border-radius: 8px;">
+            {% endif %}
+            <p><strong>Ville :</strong> {{ details.city }}</p>
+            <p><strong>Latitude :</strong> {{ details.latitude }}</p>
+            <p><strong>Longitude :</strong> {{ details.longitude }}</p>
+            <p><strong>Adresse complète :</strong></p>
+            <ul>
+                <li><strong>Municipalité :</strong> {{ details.address.municipality }}</li>
+                <li><strong>Subdivision :</strong> {{ details.address.countrySubdivision }}</li>
+                <li><strong>Région :</strong> {{ details.address.countrySubdivisionName }}</li>
+                <li><strong>Pays :</strong> {{ details.address.country }}</li>
+                <li><strong>Code Pays (ISO3) :</strong> {{ details.address.countryCodeISO3 }}</li>
+                <li><strong>Adresse complète :</strong> {{ details.address.freeformAddress }}</li>
+            </ul>
+            <h2>Endroits touristiques à visiter</h2>
+            {% if details.tourist_places %}
+                <ul>
+                    {% for place in details.tourist_places %}
+                        <li>
+                            <strong>{{ place.name }}</strong><br>
+                            <span>Adresse : {{ place.address }}</span><br>
+                            <span>Note : {{ place.rating }}</span><br>
+                            {% if place.photo_reference %}
+                                <img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference={{ place.photo_reference }}&key=YOUR_GOOGLE_API_KEY" alt="{{ place.name }}" style="width: 100%; max-width: 300px; margin-top: 10px;">
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucun endroit touristique trouvé pour cette ville.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

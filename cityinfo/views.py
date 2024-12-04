@@ -4,13 +4,30 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.conf import settings
 
+def get_city_photo(city_name):
+    unsplash_url = "https://api.unsplash.com/search/photos"
+    params = {
+        "query": city_name,
+        "client_id": settings.UNSPLASH_ACCESS_KEY,  # Ajoutez votre clé API dans settings
+        "per_page": 1,
+    }
+    response = requests.get(unsplash_url, params=params)
+    if response.status_code == 200:
+        results = response.json().get('results', [])
+        if results:
+            return results[0]['urls']['regular']  # Retourne l'URL de la photo
+    return None
+
+
+
+
 def get_city_details(request):
     if request.method == 'POST':
         city_name = request.POST.get('city', None)
         if not city_name:
             return JsonResponse({'error': 'Veuillez fournir une ville'}, status=400)
 
-        # Étape 1 : Récupérer les coordonnées via Azure Maps
+        # Récupérer les coordonnées via Azure Maps
         maps_url = f"https://atlas.microsoft.com/search/address/json"
         params = {
             "subscription-key": settings.AZURE_MAPS_SUBSCRIPTION_KEY,
@@ -25,7 +42,6 @@ def get_city_details(request):
         if not data.get('results'):
             return JsonResponse({'error': 'Ville introuvable'}, status=404)
 
-        # Extraire les informations pertinentes
         result = data['results'][0]
         coordinates = result['position']
         details = {
@@ -35,7 +51,13 @@ def get_city_details(request):
             'address': result.get('address', {}),
         }
 
-        # Étape 2 : Sauvegarder dans Azure Blob Storage
+        # Ajouter une photo de la ville
+        details['photo_url'] = get_city_photo(city_name)
+
+        # Ajouter des endroits touristiques
+        #details['tourist_places'] = get_tourist_places(city_name)
+
+        # Sauvegarder dans Azure Blob Storage
         blob_service_client = BlobServiceClient(
             account_url=f"https://{settings.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net/",
             credential=settings.AZURE_STORAGE_ACCOUNT_KEY,
@@ -46,6 +68,7 @@ def get_city_details(request):
         )
         blob_client.upload_blob(str(details), overwrite=True)
 
-        return JsonResponse({'message': 'Données récupérées et sauvegardées', 'details': details})
+        # Retourner les résultats dans un template HTML
+        return render(request, 'cityinfo/city_details.html', {'details': details})
 
     return render(request, 'cityinfo/city_form.html')

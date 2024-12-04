@@ -23,8 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m=%y8fof5o))5pfk)ec2sao4o!6n!+qzw0&0@s*(#$q3#ndy=+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True 
 
+#ALLOWED_HOSTS = ['cityinfo12-b4bmbhhxf5aufvdh.westeurope-01.azurewebsites.net']
 ALLOWED_HOSTS = []
 
 
@@ -124,10 +125,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Azure Maps
-AZURE_MAPS_SUBSCRIPTION_KEY = "sQHdGTBMjlbPXuQrkhNqtMK8sgyr6vJH3QmAh6HIAx9cs3Q45LgJJQQJ99ALACi5Ypz1z47IAAAgAZMP1s2Y"
+AZURE_MAPS_SUBSCRIPTION_KEY = "ACD8E5SevxSkVGHbNQKM27XL3Rh0MGyZuV31swE4byWUnVj42YAFJQQJ99ALAC5RqLJ1z47IAAAgAZMP1Jyo"
+AZURE_MAPS_BASE_URL = "https://atlas.microsoft.com"
 
 # Azure Blob Storage
-AZURE_STORAGE_ACCOUNT_NAME = "storagemoderation"
-AZURE_STORAGE_ACCOUNT_KEY = "fZPENIZ0hJijUnogon0OPHd2NXdIFO1VZjo3W9Nd6eQwnfadE57Tv+7VL16V4CdcY15N6Vx5GibZ+AStc7aIuw=="
+AZURE_STORAGE_ACCOUNT_NAME = "cityinfostorage1"
+AZURE_STORAGE_ACCOUNT_KEY = "u3w7rUCmq8EyO4osS9PziE3JlQOH6N1rQ4mi5d6K4xqgxZlpnvdUZ17jPqo2T4AzxGINUuUKqO2k+AStLf4+9Q=="
 AZURE_STORAGE_CONTAINER_NAME = "citycontainer"
+
+# settings.py
+UNSPLASH_ACCESS_KEY = '31zyRz0w7biZXR2YeD78SpqEpzr1chkizGvIh7x_gCo'
+
 
